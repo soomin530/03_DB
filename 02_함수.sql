@@ -204,9 +204,11 @@ SELECT TO_CHAR(SYSDATE, 'YYYY"년" MM"월" DD"일" (DY)') FROM DUAL;
 SELECT TO_DATE('2024-10-08') FROM DUAL;
 SELECT TO_DATE(20230804) FROM DUAL;
 
--- SELECT TO_DATE('241008 163230') FROM DUAL; 
+-- 2024-10-08 16:32:30.000 조회
+SELECT TO_DATE('241008 163230') FROM DUAL; 
 --> SQL Error [1861] [22008]: ORA-01861: 리터럴이 형식 문자열과 일치하지 않음
 --> 에러 나는 이유 : 포맷(패턴)을 전달해주지 않았기 때문!
+
 --> 패턴을 적용해서 작성된 문자열의 각 문자가 어떤 날짜 형식인지 인식 시킴
 SELECT TO_DATE('241008 163230', 'YYMMDD HH24MISS') FROM DUAL; 
 
@@ -246,7 +248,7 @@ FROM EMPLOYEE;
 
 -- 숫자 형변환
 -- TO_NUMBER(문자 데이터, [포맷]) : 문자형 데이터를 숫자 데이터로 변경
-
+-- DUAL 테이블에서 1,500,000 조회
 SELECT '1,000,000' + 500000 FROM DUAL;
 -- SQL Error [1722] [42000]: ORA-01722: 수치가 부적합합니다
 
