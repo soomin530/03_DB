@@ -273,5 +273,102 @@ FROM EMPLOYEE;
 SELECT EMP_NAME, NVL2(BONUS, 'O', 'X') "보너스 수령"
 FROM EMPLOYEE;
 
+------------------------------------------------------------------------------------
+
+-- 선택 함수
+-- 여러가지 경우에 따라 알맞은 결과를 선택할 수 있음
+
+-- DECODE(계산식 | 컬럼명, 조건값1, 선택값1, 조건값2, 선택값2..., 아무것도 일치하지 않을 때)
+-- 비교하고자 하는 값 또는 컬럼이 조건식과 같으면 결과 값 반환
+
+-- 직원의 성별 구하기
+                      -- 8번째 자리에서 한 자리 잘라냄. (1 OR 2 출력) 
+SELECT EMP_NAME, DECODE(SUBSTR(EMP_NO, 8, 1), '1', '남성', '2', '여성') 성별
+FROM EMPLOYEE;
+
+-- 직원의 급여를 인상하려고 한다
+-- 직급 코드가 J7인 직원은 20% 인상,
+-- 직급 코드가 J6인 직원은 15% 인상,
+-- 직급 코드가 J5인 직원은 10% 인상,
+-- 그 외 직급은 5% 인상
+-- 직원 이름, 직급코드, 급여, 인상률, 인상된 급여 조회
+SELECT EMP_NAME, JOB_CODE, SALARY,
+DECODE(JOB_CODE, 'J7', '20%',
+				 'J6', '15%',
+				 'J5', '10%',
+				 '5%') 인상률,
+DECODE(JOB_CODE, 'J7', SALARY * 1.2,
+				 'J6', SALARY * 1.15,
+			     'J5', SALARY * 1.1,
+			      SALARY * 1.05) "인상된 급여" -- 띄어쓰기 있을 시 쌍따옴표 안에 기입 
+FROM EMPLOYEE;
+
+-- CASE END 문
+-- CASE WHEN 조건식 THEN 결과값
+--		WHEN 조건식 THEN 결과값
+-- 		ELSE 결과값
+-- END
+
+-- 비교하고자 하는 값 또는 컬럼이 조건식과 같으면 결과값을 반환
+-- 조건은 범위 값 가능
+
+-- EMPLOYEE 테이블에서
+-- 급여가 500만 원 이상이면 '대'
+-- 급여가 300만 원 이상 500만 원 미만이면 '중'
+-- 급여가 300만 원 미만이면 '소' 조회
+-- 사원 이름, 급여, 급여 받는 정도 조회
+SELECT EMP_NAME, SALARY,
+CASE WHEN SALARY >= 5000000 THEN '대' -- IF
+	 WHEN SALARY >= 3000000  THEN '중' -- ELSE IF
+	 ELSE '소'
+END "급여 받는 정도"
+FROM EMPLOYEE;
+
+
+--------------------------------- 그룹 함수 ----------------------------------------
+
+-- 하나 이상의 행을 그룹으로 묶어 연산하여 총합, 평균 등을
+-- 하나의 결과 행으로 반환하는 함수
+
+-- SUM(숫자가 기록된 컬럼명) : 합계
+-- 모든 직원의 급여 합 조회
+SELECT SUM(SALARY) FROM EMPLOYEE; -- 70,096,240
+
+
+--   AVG(숫자가 기록된 컬럼명) : 평균
+-- 모든 직원의 급여 평균 조회
+SELECT ROUND(AVG(SALARY)) FROM EMPLOYEE; -- 3,047,663 (ROUND로 반올림)
+
+-- 부서코드가 'D9'인 사원들의 급여 합, 평균
+-- 해석 순서는 FROM, WHERE, SELECT 순
+SELECT SUM(SALARY), ROUND(AVG(SALARY)) FROM EMPLOYEE WHERE DEPT_CODE = 'D9';
+
+
+-- MIN(컬럼명) : 최소값
+-- MAX(컬럼명) : 최대값
+--> 컬럼명은 타입 제한 X (숫자 : 대/소, 날짜 : 과거/미래, 문자열 : 문자 순서)
+
+-- 급여 최소값, 가장 빠른 입사일, 알파벳 순서가 가장 빠른 이메일 조회
+SELECT MIN(SALARY), MIN(HIRE_DATE), MIN(EMAIL)
+FROM EMPLOYEE;
+
+-- 급여 최대값, 가장 늦은 입사일, 알파벳 순서가 가장 느린 이메일 조회
+SELECT MAX(SALARY), MAX(HIRE_DATE), MAX(EMAIL)
+FROM EMPLOYEE;
+
+-- EMPLOYEE 테이블에서
+-- 급여를 가장 많이 받는 사원의
+-- 이름과 급여, 직급코드를 조회 (서브쿼리 + 그룹함수 사용해서)
+SELECT EMP_NAME, SALARY, JOB_CODE
+FROM EMPLOYEE
+WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEE);
+-- ㄴ 서브쿼리 + 그룹함수
+
+-- COUNT() : 행 개수를 헤아려 리턴
+-- COUNT(컬럼명) : NULL을 제외한 실제값이 기록된 행 개수 리턴
+-- COUNT(*) : NULL을 포함한 전체 행 개수 리턴
+-- COUNT([DISTINCT] 컬럼명) : 중복을 제거한 행 개수 리턴 
+
+SELECT COUNT(*) FROM EMPLOYEE; -- EMPLOYEE 테이블 행 개수 리턴
 
 
