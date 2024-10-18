@@ -121,23 +121,63 @@ WHERE COACH_PROFESSOR_NO IS NULL;
 --     점수는 반올림하여 소수점 이하 한 자리까지만 표시한다.  ***
 
 
-SELECT TERM_NO, ROUND(AVG(POINT), 1) "년도 별 평점"
+SELECT SUBSTR(TERM_NO,1,4) 년도, ROUND(AVG(POINT), 1) "년도 별 평점"
 FROM TB_GRADE
 WHERE STUDENT_NO = 'A112113'
-GROUP BY TERM_NO;
+GROUP BY SUBSTR(TERM_NO,1,4) -- 소수점 이하 한 자리까지만 표시
+ORDER BY 1; -- TERM_NO 오름차순
 
-SELECT TERM_NO
-FROM TB_GRADE;
 
-SELECT SUBSTR(TERM_NO, 5, 2)
-FROM TB_GRADE;
 
 -- 13. 학과 별 휴학생 수를 파악하고자 한다. 학과 번호와 휴학생 수를 표시하는
---     SQL 문장을 작성하시오
+--     SQL 문장을 작성하시오 ***
+
+-- 첫 번째 방법
+SELECT DEPARTMENT_NO 학과코드명, SUM(DECODE(ABSENCE_YN, 'Y', 1,0)) "휴학생 수"
+								-- DECODE(계산식 | 컬럼명, 조건값1, 선택값1, 아무것도 일치하지 않을 때)
+								-- if문처럼 1이나 0일 때로 조건을 걸어둠
+								-- 'Y'일 때 1로 대체, 그 외('N')는 0으로 대체
+FROM TB_STUDENT
+GROUP BY DEPARTMENT_NO
+ORDER BY 1;
+
+-- 두 번째 방법
+SELECT DEPARTMENT_NO "학과코드명", 
+COUNT(DECODE(ABSENCE_YN,'Y','Y','N',NULL))"휴학생 수" -- COUNT : NULL인 건 빼고 COUNT 함!
+FROM TB_STUDENT
+GROUP BY DEPARTMENT_NO
+ORDER BY DEPARTMENT_NO;
+
+SELECT * FROM TB_STUDENT;
 
 -- 14. 춘 대학교에 다니는 동명이인 학생들의 이름을 찾고자 한다.
---     어떤 SQL 문장을 사용하면 가능하겠는가?
+--     어떤 SQL 문장을 사용하면 가능하겠는가? ***
+
+SELECT STUDENT_NAME 동일이름, COUNT(*)"동명인 수"
+FROM TB_STUDENT
+GROUP BY STUDENT_NAME  HAVING COUNT(*) > 1 -- STUDENT_NAME 전체에서 같은 이름이 한 개 이상일 때부터 카운트
+ORDER BY STUDENT_NAME;
+
 
 -- 15. 학번이 A112113인 김고운 학생의 년도, 학기 별 평점과
 --     년도 별 누적 평점, 총 평점을 구하는 SQL 문을 작성하시오.
 --     (단, 평점은 소수점 1자리까지만 반올림하여 표시한다.)
+
+-- 강사님 정답 풀이
+SELECT NVL(SUBSTR(TERM_NO,1,4), ' ') AS 년도, NVL(SUBSTR(TERM_NO,5,2),' ') AS 학기, ROUND(AVG(POINT),1) AS 평점
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY ROLLUP(SUBSTR(TERM_NO,1,4),SUBSTR(TERM_NO,5,2))
+ORDER BY SUBSTR(TERM_NO,1,4);
+
+
+-- 내가 쓴 틀린 풀이
+SELECT SUBSTR(TERM_NO, 1, 4) 년도, SUBSTR(TERM_NO, 5, 2) 학기, ROUND(AVG(POINT), 1)평점
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY TERM_NO
+ORDER BY TERM_NO;
+
+
+
+
