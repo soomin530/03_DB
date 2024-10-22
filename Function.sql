@@ -68,15 +68,13 @@ FROM DUAL;
 	
 
 -- 7. TO_DATE('99/10/11', 'YY/MM/DD'), TO_DATE('49/10/11', 'YY/MM/DD')는 각각 몇 년 몇 월 몇 일을 의미할까?
---    또 TO_DATE('99/10/11', 'RR/MM/DD'), TO_DATE('49/10/11', 'RR/MM/DD')는 각각 몇 년 몇 월 몇 일을 의미할까?
+--    또 TO_DATE('99/10/11', 'RR/MM/DD'), TO_DATE('49/10/11', 'RR/MM/DD')는 각각 몇 년 몇 월 몇 일을 의미할까? ***
 
-SELECT TO_DATE('49/10/11', 'YY/MM/DD')
+SELECT TO_CHAR(TO_DATE('99/10/11', 'YY/MM/DD'),'YYYY/MM/DD') "첫 번째",
+		TO_CHAR(TO_DATE('49/10/11', 'YY/MM/DD'),'YYYY/MM/DD') "두 번째",
+		TO_CHAR(TO_DATE('99/10/11', 'RR/MM/DD'),'RRRR/MM/DD') "세 번째",
+		TO_CHAR(TO_DATE('49/10/11', 'RR/MM/DD'),'RRRR/MM/DD') "네 번째"
 FROM DUAL;
-
---> '99/10/11', 'YY/MM/DD' : 2099/10/11
---> '49/10/11', 'YY/MM/DD' : 2049/10/11
---> '99/10/11', 'RR/MM/DD' : 1999/10/11
---> '49/10/11', 'RR/MM/DD' : 1949/10/11
 
 
 
