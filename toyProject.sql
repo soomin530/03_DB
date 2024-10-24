@@ -1,0 +1,45 @@
+CREATE TABLE "TB_STUDENT" (
+	STD_NO NUMBER PRIMARY KEY,                                       -- 학생 번호
+	STD_NAME VARCHAR2(20) NOT NULL,                                  -- 학생 이름
+	STD_AGE NUMBER NOT NULL,                                         -- 학생 나이
+	STD_GENDER CHAR(1) CHECK (STD_GENDER IN ('M', 'F')),             -- 학생 성별
+	STD_SCORE CHAR(1) CHECK (STD_SCORE IN ('A', 'B', 'C', 'D', 'F')) -- 학생 성적
+);
+
+SELECT * FROM TB_STUDENT;
+
+COMMENT ON COLUMN TB_STUDENT.STD_NO IS '학생 번호';
+COMMENT ON COLUMN TB_STUDENT.STD_NAME IS '학생 이름';
+COMMENT ON COLUMN TB_STUDENT.STD_AGE IS '학생 나이';
+COMMENT ON COLUMN TB_STUDENT.STD_GENDER IS '학생 성별';
+COMMENT ON COLUMN TB_STUDENT.STD_SCORE IS '학생 성적';
+
+
+
+-- 시퀀스 생성
+CREATE SEQUENCE SEQ_STD_NO NOCACHE;
+
+-- 기본 데이터
+INSERT INTO TB_STUDENT
+VALUES(SEQ_STD_NO.NEXTVAL, '유재석', 23, 'M', 'A');
+
+INSERT INTO TB_STUDENT
+VALUES(SEQ_STD_NO.NEXTVAL, '노홍철', 20, 'M', 'B');
+
+INSERT INTO TB_STUDENT
+VALUES(SEQ_STD_NO.NEXTVAL, '정형돈', 21, 'M', 'B');
+
+INSERT INTO TB_STUDENT
+VALUES(SEQ_STD_NO.NEXTVAL, '박명수', 25, 'M', 'D');
+
+COMMIT;
+
+
+
+
+
+
+
+
+
+
