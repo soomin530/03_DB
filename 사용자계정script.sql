@@ -13,13 +13,16 @@
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 -- 11G 이전 문법 사용 허용
 
-CREATE USER stud_mgmt IDENTIFIED BY mgmt1234;
+CREATE USER todoList_boot IDENTIFIED BY todoList1234;
 -- 계정 생성 구문 (ID : workbook / PW : workbook) 
 
-GRANT RESOURCE, CONNECT TO stud_mgmt;
+GRANT RESOURCE, CONNECT TO todoList_boot;
 -- 사용자 계정 권한 부여 설정
 -- RESOURCE : 테이블이나 인덱스 같은 DB 객체를 생성할 권한
 -- CONNECT : DB에 연결하고 로그인할 수 있는 권한
 
-ALTER USER stud_mgmt DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
+ALTER USER todoList_boot DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
 -- 객체가 생성될 수 있는 공간 할당량 무제한 지정
+
+
+
